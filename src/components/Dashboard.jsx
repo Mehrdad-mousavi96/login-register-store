@@ -1,15 +1,15 @@
 import React, { useState, useContext, useEffect } from "react";
 import { UserContext } from "../useContext";
 import Order from "./Order";
+import { OrdersService, ProductService } from "./Service";
 
 const Dashboard = () => {
   const [orders, setOrders] = useState([]);
 
   const userContext = useContext(UserContext);
 
-  const getPreviousOrders = (orders) => {
-    return orders.filter((ord) => ord.isPaymentCompleted === true);
-  };
+  OrdersService.getPreviousOrders(orders);
+  OrdersService.getCart(orders);
 
   const getCart = () => {
     return orders.filter((ord) => ord.isPaymentCompleted === false);
@@ -31,16 +31,15 @@ const Dashboard = () => {
       if (ordersResponse.ok) {
         let ordersResponseBody = await ordersResponse.json();
         // get all data from product
-        let productsResponse = await fetch("http://localhost:5000/products", {
-          method: "GET",
-        });
+        let productsResponse = await ProductService.fetchProducts();
 
         if (productsResponse.ok) {
           let productsResponseBody = await productsResponse.json();
 
           ordersResponseBody.forEach((order) => {
-            order.product = productsResponseBody.find(
-              (prod) => prod.id === order.productId
+            order.product = ProductService.getProductByProductId(
+              productsResponseBody,
+              order.productId
             );
           });
         }
@@ -52,7 +51,6 @@ const Dashboard = () => {
   // JSX RETURN
   return (
     <div className="flex flex-col">
-      {/* ************************* Previous Orders ************************* */}
       <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div className="py-2 inline-block min-w-full sm:px-6 lg:px-8">
           <div className="overflow-hidden">
@@ -91,14 +89,10 @@ const Dashboard = () => {
                   </th>
                 </tr>
               </thead>
-              {getPreviousOrders(orders).map((order) => (
-                <Order 
-                key={order.id} 
-                order={order}
-                product={order.product}
-                />
+              {OrdersService.getPreviousOrders(orders).map((order) => (
+                <Order key={order.id} order={order} product={order.product} />
               ))}
-              {getCart(orders).map((order) => (
+              {OrdersService.getCart(orders).map((order) => (
                 <Order product={order.product} key={order.id} order={order} />
               ))}
             </table>

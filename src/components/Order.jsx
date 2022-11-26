@@ -12,7 +12,7 @@ const Order = ({ order, product }) => {
       className={
         order.isPaymentCompleted
           ? "bg-sky-200 hover:bg-sky-300"
-          : "bg-emerald-300 hover:bg-emerald-400"
+          : "bg-emerald-200"
       }
     >
       <tr className="border-b">
@@ -26,21 +26,25 @@ const Order = ({ order, product }) => {
           {price * quantity >= 0 ? price * quantity : 0}
         </td>
         <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap flex items-center">
-          <div>
-            <AiFillMinusCircle
-              size={15}
-              className={"mx-2 cursor-pointer"}
-              onClick={() => setQuantity(quantity - 1)}
-            />
-          </div>
-          {quantity >= 0 ? quantity : 0}
-          <div>
-            <AiFillPlusCircle
-              size={15}
-              className={"mx-2 cursor-pointer"}
-              onClick={() => setQuantity(quantity + 1)}
-            />
-          </div>
+          {!order.isPaymentCompleted && (
+            <div className="flex items-center">
+              <div>
+                <AiFillMinusCircle
+                  size={13}
+                  className={"mx-2 cursor-pointer text-red-600"}
+                  onClick={() => setQuantity(quantity - 1)}
+                />
+              </div>
+              <h1>{quantity >= 0 ? quantity : 0}</h1>
+              <div>
+                <AiFillPlusCircle
+                  size={13}
+                  className={"mx-2 cursor-pointer text-lime-900"}
+                  onClick={() => setQuantity(quantity + 1)}
+                />
+              </div>
+            </div>
+          )}
         </td>
         <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
           {order.isPaymentCompleted ? (
