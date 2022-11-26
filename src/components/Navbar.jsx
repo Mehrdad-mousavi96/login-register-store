@@ -1,10 +1,17 @@
 import React from "react";
+import { useEffect } from "react";
 import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { UserContext } from "../useContext";
 
 const Navbar = () => {
   const userContext = useContext(UserContext);
+
+  const onLogout = (e) => {
+    e.preventDefault()
+    userContext.setUser({ ...userContext.user, isLoggedIn: false, currentUserName: null, currentUserId: null });
+    window.location.href = '/login'
+  };
 
   return (
     <nav className="bg-gray-800">
@@ -95,6 +102,15 @@ const Navbar = () => {
                   </a>
                 ) : (
                   ""
+                )}
+
+                {userContext.user.isLoggedIn && (
+                  <a
+                    onClick={onLogout}
+                    className="text-gray-300 cursor-pointer hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                  >
+                    Logout
+                  </a>
                 )}
               </div>
             </div>

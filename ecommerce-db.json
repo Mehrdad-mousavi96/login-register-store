@@ -196,6 +196,36 @@
       "country": "Canada",
       "receiveNewsLetter": "",
       "id": 9
+    },
+    {
+      "email": "haleyreed@gmail.com",
+      "password": "Haley123",
+      "fullName": "Haley Reed",
+      "dateOfBirth": "1996-10-29",
+      "gender": "female",
+      "country": "Usa",
+      "receiveNewsLetter": true,
+      "id": 10
+    },
+    {
+      "email": "ozgal@gmail.com",
+      "password": "Ozgal123",
+      "fullName": "ozgal",
+      "dateOfBirth": "2022-11-03",
+      "gender": "male",
+      "country": "Uk",
+      "receiveNewsLetter": "",
+      "id": 11
+    },
+    {
+      "email": "fuck@gmail.com",
+      "password": "Fuck123",
+      "fullName": "Fuck",
+      "dateOfBirth": "2022-11-29",
+      "gender": "male",
+      "country": "Indian",
+      "receiveNewsLetter": "",
+      "id": 12
     }
   ],
   "orders": [

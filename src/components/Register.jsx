@@ -1,7 +1,9 @@
 import React from "react";
+import { useContext } from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { UserContext } from "../useContext";
 
 const Register = (props) => {
   const [state, setState] = useState({
@@ -46,6 +48,8 @@ const Register = (props) => {
     country: [],
     receiveNewsLetter: [],
   });
+
+  const userContext = useContext(UserContext);
 
   useEffect(() => validate, []);
 
@@ -137,9 +141,7 @@ const Register = (props) => {
 
   useEffect(() => validate(), []);
 
-
   const onRegisterClick = async (e) => {
-
     e.preventDefault();
 
     let dirtyData = dirty;
@@ -169,11 +171,19 @@ const Register = (props) => {
       });
 
       if (response.ok) {
-        setMessage(<span className="bg-green-300 px-2">Successfully Registered</span>);
-        props.history.replace('/dashboard')
+        const responseBody = await response.json();
+        userContext.setUser({
+          ...userContext.user,
+          isLoggedIn: true,
+          currentUserId: responseBody.id,
+          currentUserName: responseBody.fullName,
+        });
+        props.history.replace("/dashboard");
       }
     } else {
-      setMessage(<span className="bg-red-300 px-2">Errors in database connection</span>);
+      setMessage(
+        <span className="bg-red-300 px-2">Errors in database connection</span>
+      );
     }
   };
 
@@ -334,49 +344,45 @@ const Register = (props) => {
 
               {/* Gender for both types of Female and male */}
               <div className="row mb-3">
-              <label className="col-lg-4">Gender</label>
-              <div className="col-lg-8">
-                <div className="form-check">
-                  <input
-                    type="radio"
-                    name="gender"
-                    value="male"
-                    id="male"
-                    className="form-check-input"
-                    checked={state.gender === "male" ? true : false}
-                    onChange={(e) =>
-                      setState({ ...state, [e.target.name]: e.target.value })
-                    }
-                  />
-                  <label htmlFor="male" >
-                    Male
-                  </label>
-                </div>
-                <div className="form-check">
-                  <input
-                    type="radio"
-                    name="gender"
-                    value="female"
-                    id="female"
-                    className="form-check-input"
-                    checked={state.gender === "female" ? true : false}
-                    onChange={(e) =>
-                      setState({ ...state, [e.target.name]: e.target.value })
-                    }
-                  />
-                  <label htmlFor="female" className="form-check-inline mb-1">
-                    Female
-                  </label>
-                </div>
-                <div className="text-danger">
-                  {dirty["gender"] && errors["gender"][0]
-                    ? errors["gender"]
-                    : ""}
+                <label className="col-lg-4">Gender</label>
+                <div className="col-lg-8">
+                  <div className="form-check">
+                    <input
+                      type="radio"
+                      name="gender"
+                      value="male"
+                      id="male"
+                      className="form-check-input"
+                      checked={state.gender === "male" ? true : false}
+                      onChange={(e) =>
+                        setState({ ...state, [e.target.name]: e.target.value })
+                      }
+                    />
+                    <label htmlFor="male">Male</label>
+                  </div>
+                  <div className="form-check">
+                    <input
+                      type="radio"
+                      name="gender"
+                      value="female"
+                      id="female"
+                      className="form-check-input"
+                      checked={state.gender === "female" ? true : false}
+                      onChange={(e) =>
+                        setState({ ...state, [e.target.name]: e.target.value })
+                      }
+                    />
+                    <label htmlFor="female" className="form-check-inline mb-1">
+                      Female
+                    </label>
+                  </div>
+                  <div className="text-danger">
+                    {dirty["gender"] && errors["gender"][0]
+                      ? errors["gender"]
+                      : ""}
+                  </div>
                 </div>
               </div>
-            </div>
-
-             
 
               <p className="text-red-900 mt-2">
                 {dirty["gender"] && errors["gender"][0] ? errors["gender"] : ""}
