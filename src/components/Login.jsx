@@ -8,8 +8,8 @@ const Login = (props) => {
   const userContext = useContext(UserContext);
 
   // States
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("sara@gmail.com");
+  const [password, setPassword] = useState("Sara123");
   const [errors, setErrors] = useState({
     email: [],
     password: [],
