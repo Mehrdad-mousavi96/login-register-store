@@ -30,6 +30,20 @@ const Dashboard = () => {
 
       if (ordersResponse.ok) {
         let ordersResponseBody = await ordersResponse.json();
+        // get all data from product
+        let productsResponse = await fetch("http://localhost:5000/products", {
+          method: "GET",
+        });
+
+        if (productsResponse.ok) {
+          let productsResponseBody = await productsResponse.json();
+
+          ordersResponseBody.forEach((order) => {
+            order.product = productsResponseBody.find(
+              (prod) => prod.id === order.productId
+            );
+          });
+        }
         setOrders(ordersResponseBody);
       }
     })();
@@ -49,33 +63,43 @@ const Dashboard = () => {
                     scope="col"
                     className="text-sm font-medium text-gray-900 px-6 py-4 text-left"
                   >
-                    #
+                    Order Id
                   </th>
                   <th
                     scope="col"
                     className="text-sm font-medium text-gray-900 px-6 py-4 text-left"
                   >
-                    Product Id
+                    Product Name
                   </th>
                   <th
                     scope="col"
                     className="text-sm font-medium text-gray-900 px-6 py-4 text-left"
                   >
-                    Quantity
+                    Price
                   </th>
                   <th
                     scope="col"
                     className="text-sm font-medium text-gray-900 px-6 py-4 text-left"
                   >
-                    Payment Status
+                    Qunatity
+                  </th>
+                  <th
+                    scope="col"
+                    className="text-sm font-medium text-gray-900 px-6 py-4 text-left"
+                  >
+                    Status
                   </th>
                 </tr>
               </thead>
               {getPreviousOrders(orders).map((order) => (
-                <Order key={order.id} order={order} />
+                <Order 
+                key={order.id} 
+                order={order}
+                product={order.product}
+                />
               ))}
               {getCart(orders).map((order) => (
-                <Order key={order.id} order={order} />
+                <Order product={order.product} key={order.id} order={order} />
               ))}
             </table>
           </div>
