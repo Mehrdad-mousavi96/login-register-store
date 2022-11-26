@@ -1,17 +1,15 @@
 import React from "react";
+import { useEffect } from "react";
 
 const Payment = () => {
+  useEffect(() => {
+    document.title = "Payment";
+  }, []);
+
   return (
     <div>
       <div className="min-w-screen min-h-screen bg-gray-200 flex items-center justify-center px-5 pb-10 pt-16">
-        <div
-          className="w-full mx-auto rounded-lg bg-white shadow-lg p-5 text-gray-700"
-        >
-          <div className="w-full pt-1 pb-5">
-            <div className="bg-indigo-500 text-white overflow-hidden rounded-full w-20 h-20 -mt-16 mx-auto shadow-lg flex justify-center items-center">
-              <i className="mdi mdi-credit-card-outline text-3xl"></i>
-            </div>
-          </div>
+        <div className="w-full mx-auto rounded-lg bg-white shadow-lg p-5 text-gray-700">
           <div className="mb-10">
             <h1 className="text-center font-bold text-xl uppercase">
               Secure payment info
@@ -28,7 +26,6 @@ const Payment = () => {
                 className="form-radio h-5 w-5 text-indigo-500"
                 name="type"
                 id="type1"
-                
               />
               <img
                 src="https://leadershipmemphis.org/wp-content/uploads/2020/08/780370.png"
@@ -142,7 +139,6 @@ const Payment = () => {
           </a>
         </div>
       </div>
-      
     </div>
   );
 };
