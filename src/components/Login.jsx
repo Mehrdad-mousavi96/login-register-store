@@ -1,8 +1,12 @@
 import React from "react";
+import { useContext } from "react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { UserContext } from "../useContext";
 
 const Login = (props) => {
+  const userContext = useContext(UserContext);
+
   // States
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -40,16 +44,13 @@ const Login = (props) => {
     // password can not blank
     if (!password) {
       errorsData.password.push("Password can not be blank");
-    } 
-
+    }
 
     //password regex
     const validPasswordRegex = /((?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,15})/;
     if (password) {
       if (!validPasswordRegex.test(password)) {
-        errorsData.password.push(
-          "Your password is Incorrect"
-        );
+        errorsData.password.push("Your password is Incorrect");
       }
     }
 
@@ -66,7 +67,7 @@ const Login = (props) => {
     return valid;
   };
 
-  useEffect(() => validate())
+  useEffect(() => validate(), []);
 
   const onLoginClick = async (e) => {
     e.preventDefault();
@@ -91,6 +92,12 @@ const Login = (props) => {
       if (response.ok) {
         let responseBody = await response.json();
         if (responseBody.length > 0) {
+          userContext.setUser({
+            ...userContext.user,
+            isLoggedIn: true,
+            currentUserId: responseBody[0].id,
+            currentUserName: responseBody[0].fullName
+          });
           props.history.replace("/dashboard");
         } else {
           setLoginMessage(
@@ -174,7 +181,9 @@ const Login = (props) => {
                   }}
                 />
                 <p className="text-red-900 mt-2">
-                  {dirty["password"] && errors["password"][0] ? errors["password"] : ""}
+                  {dirty["password"] && errors["password"][0]
+                    ? errors["password"]
+                    : ""}
                 </p>
               </div>
 

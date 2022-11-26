@@ -135,7 +135,8 @@ const Register = (props) => {
     return valid;
   };
 
-  useEffect(() => validate())
+  useEffect(() => validate(), []);
+
 
   const onRegisterClick = async (e) => {
 
