@@ -7,7 +7,7 @@ const Dashboard = () => {
     document.title = 'Dashboard'
   }, [])
   return (
-    <div className='dark:bg-zinc-900 light:bg-red-200'>Dashboard</div>
+    <div className=''>Dashboard</div>
   )
 }
 

@@ -1,13 +1,109 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import {Link} from 'react-router-dom'
-const Login = () => {
+import { Link } from "react-router-dom";
+
+const Login = (props) => {
+  // States
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState({
+    email: [],
+    password: [],
+  });
+  const [dirty, setDirty] = useState({
+    email: false,
+    password: false,
+  });
+  const [loginMessage, setLoginMessage] = useState("");
 
-  useEffect(() => {
-    document.title = 'Login'
-  }, [email, password])
+  // Validate Function
+  const validate = () => {
+    const errorsData = {};
+
+    // email
+    errorsData.email = [];
+    if (!email) {
+      errorsData.email.push("Email can not be blank");
+    }
+
+    // email regex
+    const validEmailRegex = /\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/;
+    if (email) {
+      if (!validEmailRegex.test(email)) {
+        errorsData.email.push("Proper email address is expected");
+      }
+    }
+
+    // password
+    errorsData.password = [];
+
+    // password can not blank
+    if (!password) {
+      errorsData.password.push("Password can not be blank");
+    } 
+
+
+    //password regex
+    const validPasswordRegex = /((?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,15})/;
+    if (password) {
+      if (!validPasswordRegex.test(password)) {
+        errorsData.password.push(
+          "Your password is Incorrect"
+        );
+      }
+    }
+
+    setErrors(errorsData);
+  };
+
+  useEffect(() => validate, [email, password]);
+
+  const isValid = () => {
+    let valid = true;
+    for (let control in errors) {
+      if (errors[control].length > 0) valid = false;
+    }
+    return valid;
+  };
+
+  useEffect(() => validate())
+
+  const onLoginClick = async (e) => {
+    e.preventDefault();
+    let dirtyData = dirty;
+
+    Object.keys(dirty).forEach((control) => {
+      dirtyData[control] = true;
+    });
+
+    setDirty(dirtyData);
+
+    validate();
+
+    if (isValid()) {
+      let response = await fetch(
+        `http://localhost:5000/users?email=${email}&password=${password}`,
+        {
+          method: "GET",
+        }
+      );
+
+      if (response.ok) {
+        let responseBody = await response.json();
+        if (responseBody.length > 0) {
+          props.history.replace("/dashboard");
+        } else {
+          setLoginMessage(
+            <span className="bg-red-200">Invalid Login, Please Try Again</span>
+          );
+        }
+      } else {
+        setLoginMessage(
+          <span className="bg-red-200">Unable to connect to server</span>
+        );
+      }
+    }
+  };
 
   return (
     <section className="bg-gray-50 dark:bg-gray-900">
@@ -47,7 +143,14 @@ const Login = () => {
                   required=""
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  onBlur={(e) => {
+                    setDirty({ ...dirty, [e.target.name]: true });
+                    validate();
+                  }}
                 />
+                <p className="text-red-900 mt-2">
+                  {dirty["email"] && errors["email"][0] ? errors["email"] : ""}
+                </p>
               </div>
               <div>
                 <label
@@ -65,7 +168,14 @@ const Login = () => {
                   required=""
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  onBlur={(e) => {
+                    setDirty({ ...dirty, [e.target.name]: true });
+                    validate();
+                  }}
                 />
+                <p className="text-red-900 mt-2">
+                  {dirty["password"] && errors["password"][0] ? errors["password"] : ""}
+                </p>
               </div>
 
               {/* Footer of the Login */}
@@ -97,15 +207,17 @@ const Login = () => {
                 </a>
               </div>
               <button
+                onClick={onLoginClick}
                 type="submit"
-                className="w-full hover:bg-slate-900 hover:text-white duration-300 border border-slate-900 bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                className="w-full hover:bg-slate-900 hover:text-white duration-300 border dark:border-white dark:hover:bg-white dark:hover:text-slate-900 border-slate-900 dark:text-white dark:bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
               >
                 Sign in
               </button>
+              <div>{loginMessage}</div>
               <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                 Don’t have an account yet?{" "}
                 <Link
-                  to={'/register'}
+                  to={"/register"}
                   className="font-medium text-primary-600 hover:underline dark:text-primary-500"
                 >
                   Sign up

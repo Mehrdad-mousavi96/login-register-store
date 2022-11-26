@@ -156,6 +156,46 @@
       "receiveNewsLetters": true,
       "role": "user",
       "id": 5
+    },
+    {
+      "email": "",
+      "password": "",
+      "fullName": "",
+      "dateOfBirth": "",
+      "gender": "",
+      "country": "",
+      "receiveNewsLetter": "",
+      "id": 6
+    },
+    {
+      "email": "mehrdad.fadakarmousavi@snapp-box.com",
+      "password": "Mehr3433",
+      "fullName": "mehrdad",
+      "dateOfBirth": "2022-11-02",
+      "gender": "male",
+      "country": "2",
+      "receiveNewsLetter": "",
+      "id": 7
+    },
+    {
+      "email": "fabian@gmail.com",
+      "password": "Fabian2434343",
+      "fullName": "Fabian",
+      "dateOfBirth": "2022-11-18",
+      "gender": "male",
+      "country": "Usa",
+      "receiveNewsLetter": true,
+      "id": 8
+    },
+    {
+      "email": "mehrdad@gmia.com",
+      "password": "Mehrdad243343",
+      "fullName": "mehrdad",
+      "dateOfBirth": "2022-11-15",
+      "gender": "male",
+      "country": "Canada",
+      "receiveNewsLetter": "",
+      "id": 9
     }
   ],
   "orders": [
