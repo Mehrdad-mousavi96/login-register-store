@@ -1,4 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
+import { useCallback } from "react";
 import { UserContext } from "../useContext";
 import Order from "./Order";
 import { OrdersService, ProductService } from "./Service";
@@ -11,7 +12,7 @@ const Dashboard = () => {
   OrdersService.getPreviousOrders(orders);
   OrdersService.getCart(orders);
 
-  const loadDataFromDataBase = async () => {
+  const loadDataFromDataBase = useCallback(async () => {
     const ordersResponse = await fetch(
       `http://localhost:5000/orders?userId=${userContext.user.currentUserId}`,
       {
@@ -36,12 +37,9 @@ const Dashboard = () => {
       }
       setOrders(ordersResponseBody);
     }
-  }
-      // load data from database
+  });
 
-      
   
-
   useEffect(() => {
     document.title = "Dashboard";
     loadDataFromDataBase();
