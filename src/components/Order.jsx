@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { AiFillPlusCircle, AiFillMinusCircle } from "react-icons/ai";
 
-const Order = ({ order, product }) => {
+const Order = ({ order, product, onBuyNowClick }) => {
   const [quantity, setQuantity] = useState(order.quantity);
   const [price, setPrice] = useState(product.price);
 
@@ -26,7 +26,7 @@ const Order = ({ order, product }) => {
           {price * quantity >= 0 ? price * quantity : 0}
         </td>
         <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap flex items-center">
-          {!order.isPaymentCompleted && (
+          {!order.isPaymentCompleted ? (
             <div className="flex items-center">
               <div>
                 <AiFillMinusCircle
@@ -44,19 +44,25 @@ const Order = ({ order, product }) => {
                 />
               </div>
             </div>
+          ) : (
+            quantity
           )}
         </td>
         <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
           {order.isPaymentCompleted ? (
             <p className="font-semibold">Paid</p>
           ) : (
-            <Link
-              target={"_blank"}
-              to={"/pay"}
-              className="text-sky-900 underline cursor-pointer"
-            >
-              Payment Gateway
-            </Link>
+            <div className="flex">
+              <button
+                onClick={() => {
+                  onBuyNowClick(order.id, order.userId, order.productId, order.quantity);
+                }}
+                className="mx-2"
+              >
+                Buy Now
+              </button>
+              <button>Delete</button>
+            </div>
           )}
         </td>
       </tr>

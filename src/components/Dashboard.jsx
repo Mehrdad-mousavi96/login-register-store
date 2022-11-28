@@ -11,42 +11,69 @@ const Dashboard = () => {
   OrdersService.getPreviousOrders(orders);
   OrdersService.getCart(orders);
 
-  const getCart = () => {
-    return orders.filter((ord) => ord.isPaymentCompleted === false);
-  };
+  const loadDataFromDataBase = async () => {
+    const ordersResponse = await fetch(
+      `http://localhost:5000/orders?userId=${userContext.user.currentUserId}`,
+      {
+        method: "GET",
+      }
+    );
+
+    if (ordersResponse.ok) {
+      let ordersResponseBody = await ordersResponse.json();
+      // get all data from product
+      let productsResponse = await ProductService.fetchProducts();
+
+      if (productsResponse.ok) {
+        let productsResponseBody = await productsResponse.json();
+
+        ordersResponseBody.forEach((order) => {
+          order.product = ProductService.getProductByProductId(
+            productsResponseBody,
+            order.productId
+          );
+        });
+      }
+      setOrders(ordersResponseBody);
+    }
+  }
+      // load data from database
+
+      
+  
 
   useEffect(() => {
     document.title = "Dashboard";
+    loadDataFromDataBase();
+  }, [userContext.user.currentUserId, loadDataFromDataBase]);
 
-    // load data from database
-
-    (async () => {
-      const ordersResponse = await fetch(
-        `http://localhost:5000/orders?userId=${userContext.user.currentUserId}`,
+  // /////////////////////////// begining of function ////////////////////////////
+  const onBuyNowClick = async (orderId, userId, productId, quantity) => {
+    if (window.confirm("Do you wanna pay?")) {
+      const updateOrder = {
+        id: orderId,
+        userId,
+        productId,
+        quantity,
+        isPaymentCompleted: true,
+      };
+      let orderResponse = await fetch(
+        `http://localhost:5000/orders/${orderId}`,
         {
-          method: "GET",
+          method: "PUT",
+          body: JSON.stringify(updateOrder),
+          headers: {
+            "Content-type": "application/json",
+          },
         }
       );
-
-      if (ordersResponse.ok) {
-        let ordersResponseBody = await ordersResponse.json();
-        // get all data from product
-        let productsResponse = await ProductService.fetchProducts();
-
-        if (productsResponse.ok) {
-          let productsResponseBody = await productsResponse.json();
-
-          ordersResponseBody.forEach((order) => {
-            order.product = ProductService.getProductByProductId(
-              productsResponseBody,
-              order.productId
-            );
-          });
-        }
-        setOrders(ordersResponseBody);
+      let orderResponseBody = await orderResponse.json();
+      if (orderResponse.ok) {
+        loadDataFromDataBase();
       }
-    })();
-  }, [userContext.user.currentUserId]);
+    }
+  };
+  // /////////////////////////// end of function ////////////////////////////
 
   // JSX RETURN
   return (
@@ -93,7 +120,12 @@ const Dashboard = () => {
                 <Order key={order.id} order={order} product={order.product} />
               ))}
               {OrdersService.getCart(orders).map((order) => (
-                <Order product={order.product} key={order.id} order={order} />
+                <Order
+                  product={order.product}
+                  key={order.id}
+                  order={order}
+                  onBuyNowClick={onBuyNowClick}
+                />
               ))}
             </table>
           </div>

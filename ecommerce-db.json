@@ -142,9 +142,10 @@
       "id": 3,
       "userId": 1,
       "productId": 3,
-      "quantity": 1,
-      "isPaymentCompleted": false
-    },{
+      "quantity": 155,
+      "isPaymentCompleted": true
+    },
+    {
       "id": 4,
       "userId": 2,
       "productId": 8,
