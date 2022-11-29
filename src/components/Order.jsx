@@ -1,10 +1,14 @@
 import React from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { AiFillPlusCircle, AiFillMinusCircle, AiFillDelete } from "react-icons/ai";
+import {
+  AiFillPlusCircle,
+  AiFillMinusCircle,
+  AiFillDelete,
+} from "react-icons/ai";
 
 const Order = ({ order, product, onBuyNowClick, onDeleteClick }) => {
-  console.log('<Order />');
+  console.log("<Order />");
 
   const [quantity, setQuantity] = useState(order.quantity);
   const [price, setPrice] = useState(product.price);
@@ -12,9 +16,7 @@ const Order = ({ order, product, onBuyNowClick, onDeleteClick }) => {
   return (
     <tbody
       className={
-        order.isPaymentCompleted
-          ? "bg-sky-200 hover:bg-sky-300"
-          : "bg-emerald-200"
+        order.isPaymentCompleted ? "bg-gray-200" : "bg-sky-200 hover:bg-sky-300"
       }
     >
       <tr className="border-b">
@@ -57,16 +59,23 @@ const Order = ({ order, product, onBuyNowClick, onDeleteClick }) => {
             <div className="flex">
               <button
                 onClick={() => {
-                  onBuyNowClick(order.id, order.userId, order.productId, order.quantity);
+                  onBuyNowClick(
+                    order.id,
+                    order.userId,
+                    order.productId,
+                    order.quantity
+                  );
                 }}
-                className="mx-2 underline"
+                className="mx-4 border border-sky-900 px-2 py-1 text-white bg-sky-900"
               >
                 Buy Now
               </button>
-              <button onClick={() => {
-                onDeleteClick(order.id)
-              }}>
-                <AiFillDelete className="text -red-700" size={18} />
+              <button
+                onClick={() => {
+                  onDeleteClick(order.id);
+                }}
+              >
+                <AiFillDelete className="text-red-700" size={20} />
               </button>
             </div>
           )}
