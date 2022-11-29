@@ -1,9 +1,11 @@
 import React from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { AiFillPlusCircle, AiFillMinusCircle } from "react-icons/ai";
+import { AiFillPlusCircle, AiFillMinusCircle, AiFillDelete } from "react-icons/ai";
 
-const Order = ({ order, product, onBuyNowClick }) => {
+const Order = ({ order, product, onBuyNowClick, onDeleteClick }) => {
+  console.log('<Order />');
+
   const [quantity, setQuantity] = useState(order.quantity);
   const [price, setPrice] = useState(product.price);
 
@@ -57,11 +59,15 @@ const Order = ({ order, product, onBuyNowClick }) => {
                 onClick={() => {
                   onBuyNowClick(order.id, order.userId, order.productId, order.quantity);
                 }}
-                className="mx-2"
+                className="mx-2 underline"
               >
                 Buy Now
               </button>
-              <button>Delete</button>
+              <button onClick={() => {
+                onDeleteClick(order.id)
+              }}>
+                <AiFillDelete className="text -red-700" size={18} />
+              </button>
             </div>
           )}
         </td>

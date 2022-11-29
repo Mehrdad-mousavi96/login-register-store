@@ -132,20 +132,6 @@
       "isPaymentCompleted": true
     },
     {
-      "id": 2,
-      "userId": 1,
-      "productId": 2,
-      "quantity": 1,
-      "isPaymentCompleted": true
-    },
-    {
-      "id": 3,
-      "userId": 1,
-      "productId": 3,
-      "quantity": 12,
-      "isPaymentCompleted": true
-    },
-    {
       "id": 4,
       "userId": 2,
       "productId": 8,

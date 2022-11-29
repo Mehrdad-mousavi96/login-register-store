@@ -5,6 +5,7 @@ import Order from "./Order";
 import { OrdersService, ProductService } from "./Service";
 
 const Dashboard = () => {
+  console.log("<Dashboard />");
   const [orders, setOrders] = useState([]);
 
   const userContext = useContext(UserContext);
@@ -37,41 +38,60 @@ const Dashboard = () => {
       }
       setOrders(ordersResponseBody);
     }
-  });
+  }, []);
 
-  
   useEffect(() => {
     document.title = "Dashboard";
     loadDataFromDataBase();
-  }, [userContext.user.currentUserId, loadDataFromDataBase]);
+  }, [userContext.user.currentUserId]);
 
-  // /////////////////////////// begining of function ////////////////////////////
-  const onBuyNowClick = async (orderId, userId, productId, quantity) => {
-    if (window.confirm("Do you wanna pay?")) {
-      const updateOrder = {
-        id: orderId,
-        userId,
-        productId,
-        quantity,
-        isPaymentCompleted: true,
-      };
+  // /////////////////////////// begining of onBuy ////////////////////////////
+  const onBuyNowClick = useCallback(
+    async (orderId, userId, productId, quantity) => {
+      if (window.confirm("Do you wanna pay?")) {
+        const updateOrder = {
+          id: orderId,
+          userId,
+          productId,
+          quantity,
+          isPaymentCompleted: true,
+        };
+        let orderResponse = await fetch(
+          `http://localhost:5000/orders/${orderId}`,
+          {
+            method: "PUT",
+            body: JSON.stringify(updateOrder),
+            headers: {
+              "Content-type": "application/json",
+            },
+          }
+        );
+        let orderResponseBody = await orderResponse.json();
+        if (orderResponse.ok) {
+          loadDataFromDataBase();
+        }
+      }
+    },
+    [loadDataFromDataBase]
+  );
+  // /////////////////////////// end of onBuy ////////////////////////////
+
+  // /////////////////////////// beginning of onDelete ///////////////////////////
+  const onDeleteClick = async (orderId) => {
+    if (window.confirm("Are you sure to Delete?")) {
       let orderResponse = await fetch(
         `http://localhost:5000/orders/${orderId}`,
         {
-          method: "PUT",
-          body: JSON.stringify(updateOrder),
-          headers: {
-            "Content-type": "application/json",
-          },
+          method: "DELETE",
         }
       );
-      let orderResponseBody = await orderResponse.json();
       if (orderResponse.ok) {
+        let orderResponseBody = await orderResponse.json();
         loadDataFromDataBase();
       }
     }
   };
-  // /////////////////////////// end of function ////////////////////////////
+  // /////////////////////////// end of noDelete ///////////////////////////
 
   // JSX RETURN
   return (
@@ -123,6 +143,7 @@ const Dashboard = () => {
                   key={order.id}
                   order={order}
                   onBuyNowClick={onBuyNowClick}
+                  onDeleteClick={onDeleteClick}
                 />
               ))}
             </table>
