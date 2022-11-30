@@ -3,14 +3,26 @@ import { useEffect } from "react";
 import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { UserContext } from "../useContext";
+import {
+  AiFillDashboard,
+  AiOutlineLogin,
+  AiFillShopping,
+} from "react-icons/ai";
+import { BsFillPersonPlusFill } from "react-icons/bs";
+import { GiExitDoor } from "react-icons/gi";
 
 const Navbar = () => {
   const userContext = useContext(UserContext);
 
   const onLogout = (e) => {
-    e.preventDefault()
-    userContext.setUser({ ...userContext.user, isLoggedIn: false, currentUserName: null, currentUserId: null });
-    window.location.href = '/login'
+    e.preventDefault();
+    userContext.setUser({
+      ...userContext.user,
+      isLoggedIn: false,
+      currentUserName: null,
+      currentUserId: null,
+    });
+    window.location.href = "/login";
   };
 
   return (
@@ -65,8 +77,9 @@ const Navbar = () => {
                 {userContext.user.isLoggedIn && (
                   <Link
                     to={"/dashboard"}
-                    className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                    className="text-gray-300 flex items-center hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                   >
+                    <AiFillDashboard className="mx-1" size={17} />
                     Dashboard
                   </Link>
                 )}
@@ -76,19 +89,19 @@ const Navbar = () => {
                 ) : (
                   <Link
                     to={"/"}
-                    className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                    className="text-gray-300 flex items-center hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                   >
+                    <AiOutlineLogin className="mx-1" size={17} />
                     Login
                   </Link>
                 )}
 
-                {userContext.user.isLoggedIn ? (
-                  ""
-                ) : (
+                {!userContext.user.isLoggedIn && (
                   <Link
                     to={"/register"}
-                    className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                    className="text-gray-300 flex items-center hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                   >
+                    <BsFillPersonPlusFill className="mx-1" size={17} />
                     Register
                   </Link>
                 )}
@@ -98,17 +111,26 @@ const Navbar = () => {
                     href="#"
                     className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                   >
-                    {userContext.user.currentUserName}
+                    {userContext.user.currentUserName.toUpperCase()}
                   </a>
                 ) : (
                   ""
                 )}
 
+                <Link
+                  to={"/store"}
+                  className="text-gray-300 flex items-center hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                >
+                  <AiFillShopping className="mx-1" size={17} />
+                  Store
+                </Link>
+
                 {userContext.user.isLoggedIn && (
                   <a
                     onClick={onLogout}
-                    className="text-gray-300 cursor-pointer hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                    className="text-gray-300 flex items-center cursor-pointer hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                   >
+                    <GiExitDoor className="mx-1" size={17} />
                     Logout
                   </a>
                 )}

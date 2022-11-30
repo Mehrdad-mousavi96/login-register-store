@@ -3,6 +3,7 @@ import { useCallback } from "react";
 import { UserContext } from "../useContext";
 import Order from "./Order";
 import { OrdersService, ProductService } from "./Service";
+import { BiRefresh } from "react-icons/bi";
 
 const Dashboard = () => {
   const [close, setClose] = useState({
@@ -82,10 +83,10 @@ const Dashboard = () => {
     },
     [loadDataFromDataBase]
   );
-  // /////////////////////////// end of onBuy ////////////////////////////
+  // /////////////////////////// end of onBuy ///////////////////////////
 
   // /////////////////////////// start onDelete ///////////////////////////
-  const onDeleteClick = async (orderId) => {
+  const onDeleteClick = useCallback(async (orderId) => {
     if (window.confirm("Are you sure to Delete?")) {
       let orderResponse = await fetch(
         `http://localhost:5000/orders/${orderId}`,
@@ -99,8 +100,8 @@ const Dashboard = () => {
         setShowOrderDeleteAlert(true);
       }
     }
-  };
-  // /////////////////////////// end of noDelete ///////////////////////////
+  }, []);
+  // /////////////////////////// end of noDelete //////////////////////////
 
   // JSX RETURN
   return (
@@ -108,6 +109,15 @@ const Dashboard = () => {
       <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div className="py-2 inline-block min-w-full sm:px-6 lg:px-8">
           <div className="overflow-hidden">
+            {/* Refresh */}
+            <button
+              onClick={loadDataFromDataBase}
+              className="bg-slate-900 px-2 py-1 text-white mx-4 "
+            >
+              <BiRefresh />
+            </button>
+            {/* end of Refresh */}
+
             {/* /////////////////////////// Delete Alert /////////////////////////// */}
             {showOrderDeleteAlert && (
               <div
@@ -171,6 +181,8 @@ const Dashboard = () => {
               </div>
             )}
             {/* /////////////////////////// end of Buy Alert /////////////////////////// */}
+
+            {/* table */}
             <table className="min-w-full">
               <thead className="border-b bg-blue-400">
                 <tr>
@@ -219,6 +231,7 @@ const Dashboard = () => {
                 />
               ))}
             </table>
+            {/* end of table */}
           </div>
         </div>
       </div>
