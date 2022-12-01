@@ -6,9 +6,11 @@ import { BrandsService, CategoriesService, ProductService } from "./Service";
 const Store = () => {
   const userContext = useContext(UserContext);
 
+  // states
   const [brands, setBrands] = useState([]);
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
+  const [productToShow, setProductToShow] = useState([])
 
   useEffect(() => {
     (async () => {
@@ -51,10 +53,10 @@ const Store = () => {
         });
 
       setProducts(productsResponseBody);
+      setProductToShow(productsResponseBody)
     })();
     document.title = "Store";
   }, []);
-
 
   // updateBrandIsChecked function //
   const updateBrandIsChecked = (id) => {
@@ -63,6 +65,7 @@ const Store = () => {
       return brand;
     });
     setBrands(brandsData);
+    updateProductToShow()
   };
 
   // updateCategoryIsChecked function //
@@ -72,7 +75,52 @@ const Store = () => {
       return category;
     });
     setCategories(categoriesData);
+    updateProductToShow()
   };
+
+  const onAddToCartClick = (propProduct) => {
+    (async () => {
+      let newOrder = {
+        userId: userContext.user.currentUserId,
+        productId: propProduct.id,
+        quantity: 1,
+        isPaymentCompleted: false,
+      };
+
+      let orderResponse = await fetch(`http://localhost:5000/orders`, {
+        method: "POST",
+        body: JSON.stringify(newOrder),
+        headers: { "Content-type": "application/json" },
+      });
+
+      if (orderResponse.ok) {
+        let orderResponseBody = await orderResponse.json();
+        let prods = products.map((p) => {
+          if (p.id === propProduct.id) p.isOrdered = true
+          return p
+        })
+        setProducts(prods)
+        updateProductToShow()
+      } else {
+        console.log(orderResponse);
+      }
+    })();
+  };
+
+  // show products filter //
+  const updateProductToShow = () => {
+    setProductToShow(
+      products.filter(prod => {
+        return (
+          categories.filter(cat => cat.id === prod.categoryId && cat.isChecked).length > 0
+        )
+      }).filter((prod) => {
+        return (
+          brands.filter(brand => brand.id === prod.brandId && brand.isChecked).length > 0
+        )
+      })
+    )
+  }
 
   // JSX RETURN
   return (
@@ -102,7 +150,7 @@ const Store = () => {
                       <input
                         className="w-4 h-4 my-3 text-blue-600 mr-3 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                         value={"true"}
-                        // checked={brand.isChecked}
+                        checked={brand.isChecked}
                         type="checkbox"
                         id={`brand${brand.id}`}
                         onChange={() => {
@@ -136,7 +184,7 @@ const Store = () => {
                           <input
                             className="w-4 h-4 my-3 text-blue-600 mr-3 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                             value={"true"}
-                            // checked={category.isChecked}
+                            checked={category.isChecked}
                             type="checkbox"
                             id={`category${category.id}`}
                             onChange={() => {
@@ -160,9 +208,13 @@ const Store = () => {
 
         {/* start right side */}
         <div className="flex flex-wrap w-full items-center justify-center">
-          {products.map((product) => (
-            <div className="p-4">
-              <Product product={product} />
+          {productToShow.map((product) => (
+            <div key={product.id} className="p-4">
+              <Product
+                key={product.id}
+                product={product}
+                onAddToCartClick={onAddToCartClick}
+              />
             </div>
           ))}
         </div>

@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+
 import {
   AiFillPlusCircle,
   AiFillMinusCircle,
@@ -8,7 +8,6 @@ import {
 } from "react-icons/ai";
 
 const Order = ({ order, product, onBuyNowClick, onDeleteClick }) => {
-  console.log("<Order />");
 
   const [quantity, setQuantity] = useState(order.quantity);
   const [price, setPrice] = useState(product.price);

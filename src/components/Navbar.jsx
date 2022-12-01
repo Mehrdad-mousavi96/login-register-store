@@ -107,23 +107,24 @@ const Navbar = () => {
                 )}
 
                 {userContext.user.isLoggedIn ? (
-                  <a
-                    href="#"
+                  <button
                     className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                   >
                     {userContext.user.currentUserName.toUpperCase()}
-                  </a>
+                  </button>
                 ) : (
                   ""
                 )}
 
-                <Link
-                  to={"/store"}
-                  className="text-gray-300 flex items-center hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-                >
-                  <AiFillShopping className="mx-1" size={17} />
-                  Store
-                </Link>
+                {userContext.user.isLoggedIn && (
+                  <Link
+                    to={"/store"}
+                    className="text-gray-300 flex items-center hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                  >
+                    <AiFillShopping className="mx-1" size={17} />
+                    Store
+                  </Link>
+                )}
 
                 {userContext.user.isLoggedIn && (
                   <a

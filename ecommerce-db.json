@@ -46,7 +46,8 @@
       "brandId": 1,
       "categoryId": 1,
       "rating": 5,
-      "img": "https://images.unsplash.com/photo-1510878933023-e2e2e3942fb0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTR8fGlwaG9uZXxlbnwwfDB8MHx8&auto=format&fit=crop&w=800&q=60"},
+      "img": "https://images.unsplash.com/photo-1510878933023-e2e2e3942fb0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTR8fGlwaG9uZXxlbnwwfDB8MHx8&auto=format&fit=crop&w=800&q=60"
+    },
     {
       "id": 2,
       "productName": "Apple iPad Pro",
@@ -146,6 +147,20 @@
       "userId": 1,
       "productId": 8,
       "quantity": 7,
+      "isPaymentCompleted": true
+    },
+    {
+      "id": 3,
+      "userId": 1,
+      "productId": 7,
+      "quantity": 1,
+      "isPaymentCompleted": true
+    },
+    {
+      "id": 6,
+      "userId": 1,
+      "productId": 3,
+      "quantity": 1,
       "isPaymentCompleted": true
     }
   ]
