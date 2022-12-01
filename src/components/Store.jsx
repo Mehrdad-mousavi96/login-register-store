@@ -10,15 +10,17 @@ const Store = () => {
   const [brands, setBrands] = useState([]);
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
-  const [productToShow, setProductToShow] = useState([])
+  const [productToShow, setProductToShow] = useState([]);
+  const [search, setSearch] = useState([]);
 
+  // fetching all stuffs
   useEffect(() => {
     (async () => {
       // fetch Brands
       let brandsResponse = await BrandsService.fetchBrands();
       let brandsResponseBody = await brandsResponse.json();
       brandsResponseBody.forEach((brand) => {
-        brand.isChecked = true;
+        brand.isChecked = false;
       });
       setBrands(brandsResponseBody);
 
@@ -26,12 +28,17 @@ const Store = () => {
       let categoriesResponse = await CategoriesService.fetchCategories();
       let categoriesResponseBody = await categoriesResponse.json();
       categoriesResponseBody.forEach((category) => {
-        category.isChecked = true;
+        category.isChecked = false;
       });
       setCategories(categoriesResponseBody);
 
       // fetch Products
-      let productsResponse = await ProductService.fetchProducts();
+      let productsResponse = await fetch(
+        `http://localhost:5000/products?productName_like=${search}`,
+        {
+          method: "GET",
+        }
+      );
       let productsResponseBody = await productsResponse.json();
 
       productsResponse.ok &&
@@ -53,10 +60,10 @@ const Store = () => {
         });
 
       setProducts(productsResponseBody);
-      setProductToShow(productsResponseBody)
+      setProductToShow(productsResponseBody);
     })();
     document.title = "Store";
-  }, []);
+  }, [search]);
 
   // updateBrandIsChecked function //
   const updateBrandIsChecked = (id) => {
@@ -65,7 +72,7 @@ const Store = () => {
       return brand;
     });
     setBrands(brandsData);
-    updateProductToShow()
+    updateProductToShow();
   };
 
   // updateCategoryIsChecked function //
@@ -75,7 +82,7 @@ const Store = () => {
       return category;
     });
     setCategories(categoriesData);
-    updateProductToShow()
+    updateProductToShow();
   };
 
   const onAddToCartClick = (propProduct) => {
@@ -96,11 +103,11 @@ const Store = () => {
       if (orderResponse.ok) {
         let orderResponseBody = await orderResponse.json();
         let prods = products.map((p) => {
-          if (p.id === propProduct.id) p.isOrdered = true
-          return p
-        })
-        setProducts(prods)
-        updateProductToShow()
+          if (p.id === propProduct.id) p.isOrdered = true;
+          return p;
+        });
+        setProducts(prods);
+        updateProductToShow();
       } else {
         console.log(orderResponse);
       }
@@ -110,17 +117,23 @@ const Store = () => {
   // show products filter //
   const updateProductToShow = () => {
     setProductToShow(
-      products.filter(prod => {
-        return (
-          categories.filter(cat => cat.id === prod.categoryId && cat.isChecked).length > 0
-        )
-      }).filter((prod) => {
-        return (
-          brands.filter(brand => brand.id === prod.brandId && brand.isChecked).length > 0
-        )
-      })
-    )
-  }
+      products
+        .filter((prod) => {
+          return (
+            categories.filter(
+              (cat) => cat.id === prod.categoryId && cat.isChecked
+            ).length > 0
+          );
+        })
+        .filter((prod) => {
+          return (
+            brands.filter(
+              (brand) => brand.id === prod.brandId && brand.isChecked
+            ).length > 0
+          );
+        })
+    );
+  };
 
   // JSX RETURN
   return (
@@ -128,44 +141,25 @@ const Store = () => {
       <div className="flex">
         {/* ******************* start left side ******************* */}
         <div>
-          <div className="flex flex-col w-1/6 h-screen">
+          <div className="flex flex-col w-full h-screen">
             {/* start headers */}
-            <div className="w-full h-1/5">
-              <p>Headers</p>
+            <div className="w-full px-4 flex flex-col items-center justify-center h-1/5">
+              <p className="text-md">
+                <b className="underline text-lg">{productToShow.length}</b>{" "}
+                Products are showing
+              </p>
+              <input
+                className="border border-slate-900 px-2 my-4 focus:outline-none rounded-md"
+                placeholder="search products"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                type="search"
+                autoFocus
+                name=""
+                id=""
+              />
             </div>
             {/* end of headers */}
-
-            {/* start brands */}
-            <div className=" h-1/2 flex flex-col justify-start px-3 items-left">
-              <div>
-                <h1 className="sm:text-lg text-sm tracking-wide my-2 font-semibold">
-                  Brands
-                </h1>
-                <ul>
-                  {brands.map((brand) => (
-                    <li
-                      className="sm:text-lg text-sm tracking-wide my-1 mx-3 font-light flex items-center"
-                      key={brand.id}
-                    >
-                      <input
-                        className="w-4 h-4 my-3 text-blue-600 mr-3 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                        value={"true"}
-                        checked={brand.isChecked}
-                        type="checkbox"
-                        id={`brand${brand.id}`}
-                        onChange={() => {
-                          updateBrandIsChecked(brand.id);
-                        }}
-                      />
-                      <label htmlFor={`brand${brand.id}`}>
-                        {brand.brandName}
-                      </label>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-            {/* end of brands */}
 
             {/* start categories */}
             <div className="h-1/3 px-4 ">
@@ -202,6 +196,38 @@ const Store = () => {
               </div>
             </div>
             {/* end of categories */}
+
+            {/* start brands */}
+            <div className=" h-1/2 flex flex-col justify-start px-3 items-left">
+              <div>
+                <h1 className="sm:text-lg text-sm tracking-wide my-2 font-semibold">
+                  Brands
+                </h1>
+                <ul>
+                  {brands.map((brand) => (
+                    <li
+                      className="sm:text-lg text-sm tracking-wide my-1 mx-3 font-light flex items-center"
+                      key={brand.id}
+                    >
+                      <input
+                        className="w-4 h-4 my-3 text-blue-600 mr-3 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                        value={"true"}
+                        checked={brand.isChecked}
+                        type="checkbox"
+                        id={`brand${brand.id}`}
+                        onChange={() => {
+                          updateBrandIsChecked(brand.id);
+                        }}
+                      />
+                      <label htmlFor={`brand${brand.id}`}>
+                        {brand.brandName}
+                      </label>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+            {/* end of brands */}
           </div>
         </div>
         {/* ******************* end of left side ******************* */}

@@ -110,6 +110,24 @@
       "categoryId": 1,
       "rating": 2,
       "img": "https://images.unsplash.com/photo-1610792516307-ea5acd9c3b00?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8c2Ftc3VuZyUyMG1vYmlsZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60"
+    },
+    {
+      "id": 9,
+      "productName": "Apple iPhone 13 Pro Max",
+      "price": 1200,
+      "brandId": 1,
+      "categoryId": 1,
+      "rating": 5,
+      "img": "https://images.unsplash.com/photo-1632661674596-df8be070a5c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8aXBob25lJTIwMTMlMjBwcm8lMjBtYXh8ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=60"
+    },
+    {
+      "id": 10,
+      "productName": "Apple Macbook Air M1",
+      "price": 999,
+      "brandId": 1,
+      "categoryId": 2,
+      "rating": 5,
+      "img": "https://images.unsplash.com/photo-1639268069490-49f7d2df2fe7?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8N3x8bWFjYm9vayUyMGFpciUyMG0xfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=800&q=60"
     }
   ],
   "users": [
@@ -160,6 +178,34 @@
       "id": 6,
       "userId": 1,
       "productId": 3,
+      "quantity": 1,
+      "isPaymentCompleted": true
+    },
+    {
+      "userId": null,
+      "productId": 10,
+      "quantity": 1,
+      "isPaymentCompleted": false,
+      "id": 7
+    },
+    {
+      "id": 8,
+      "userId": 1,
+      "productId": 10,
+      "quantity": 1,
+      "isPaymentCompleted": true
+    },
+    {
+      "userId": null,
+      "productId": 1,
+      "quantity": 1,
+      "isPaymentCompleted": false,
+      "id": 9
+    },
+    {
+      "id": 10,
+      "userId": 1,
+      "productId": 1,
       "quantity": 1,
       "isPaymentCompleted": true
     }

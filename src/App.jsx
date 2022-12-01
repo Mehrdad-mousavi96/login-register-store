@@ -1,4 +1,5 @@
 import React from "react";
+import { useEffect } from "react";
 import { useState } from "react";
 import {
   BrowserRouter as Router,
@@ -16,15 +17,14 @@ import Store from "./components/Store";
 import { UserContext } from "./useContext";
 
 const App = () => {
-
-  const [user,setUser] = useState({
+  const [user, setUser] = useState({
     isLoggedIn: false,
     currentUserId: null,
-    currentUserName: null
-  })
+    currentUserName: null,
+  });
 
   return (
-    <UserContext.Provider value={{user, setUser}}>
+    <UserContext.Provider value={{ user, setUser }}>
       <Router>
         <Navbar />
         <Switch>
