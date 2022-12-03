@@ -1,15 +1,17 @@
 import React from "react";
 import { useContext } from "react";
+import { useRef } from "react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { UserContext } from "../useContext";
 
 const Login = (props) => {
+  
   const userContext = useContext(UserContext);
 
   // States
-  const [email, setEmail] = useState("sara@gmail.com");
-  const [password, setPassword] = useState("Sara123");
+  const [email, setEmail] = useState("admin@gmail.com");
+  const [password, setPassword] = useState("Admin123");
   const [errors, setErrors] = useState({
     email: [],
     password: [],
@@ -19,6 +21,11 @@ const Login = (props) => {
     password: false,
   });
   const [loginMessage, setLoginMessage] = useState("");
+
+  const inputRef = useRef(null)
+  useEffect(() => {
+    inputRef.current.focus()
+  }, [])
 
   // Validate Function
   const validate = () => {
@@ -72,7 +79,6 @@ const Login = (props) => {
   const onLoginClick = async (e) => {
     e.preventDefault();
     let dirtyData = dirty;
-
     Object.keys(dirty).forEach((control) => {
       dirtyData[control] = true;
     });
@@ -96,9 +102,10 @@ const Login = (props) => {
             ...userContext.user,
             isLoggedIn: true,
             currentUserId: responseBody[0].id,
-            currentUserName: responseBody[0].fullName
+            currentUserName: responseBody[0].fullName,
+            currentUserRole: responseBody[0].role
           });
-          props.history.replace("/dashboard");
+          {responseBody[0].role === 'user' ? props.history.replace("/dashboard") : props.history.replace("/products") }
         } else {
           setLoginMessage(
             <span className="bg-red-200">Invalid Login, Please Try Again</span>
@@ -154,6 +161,7 @@ const Login = (props) => {
                     setDirty({ ...dirty, [e.target.name]: true });
                     validate();
                   }}
+                  ref={inputRef}
                 />
                 <p className="text-red-900 mt-2">
                   {dirty["email"] && errors["email"][0] ? errors["email"] : ""}

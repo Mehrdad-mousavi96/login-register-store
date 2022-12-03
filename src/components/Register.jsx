@@ -1,5 +1,6 @@
 import React from "react";
 import { useContext } from "react";
+import { useRef } from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
@@ -14,6 +15,7 @@ const Register = (props) => {
     gender: "",
     country: "",
     receiveNewsLetter: "",
+    role: 'user'
   });
 
   const [countries, setCountries] = useState([
@@ -52,6 +54,12 @@ const Register = (props) => {
   const userContext = useContext(UserContext);
 
   useEffect(() => validate, []);
+
+  const inputRef = useRef(null)
+
+  useEffect(() => {
+    inputRef.current.focus()
+  }, [])
 
   useEffect(() => {
     document.title = "Register";
@@ -177,6 +185,7 @@ const Register = (props) => {
           isLoggedIn: true,
           currentUserId: responseBody.id,
           currentUserName: responseBody.fullName,
+          currentUserRole: responseBody.role
         });
         props.history.replace("/dashboard");
       }
@@ -247,6 +256,7 @@ const Register = (props) => {
                     setDirty({ ...dirty, [e.target.name]: true });
                     validate();
                   }}
+                  ref={inputRef}
                 />
                 <p className="text-red-900 mt-2">
                   {dirty["email"] && errors["email"][0] ? errors["email"] : ""}

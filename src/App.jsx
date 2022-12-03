@@ -12,6 +12,7 @@ import Login from "./components/Login";
 import Navbar from "./components/Navbar";
 import NoMatchPage from "./components/NoMatchPage";
 import Payment from "./components/Payment";
+import ProductList from "./components/ProductList";
 import Register from "./components/Register";
 import Store from "./components/Store";
 import { UserContext } from "./useContext";
@@ -21,6 +22,7 @@ const App = () => {
     isLoggedIn: false,
     currentUserId: null,
     currentUserName: null,
+    currentUserRole: null
   });
 
   return (
@@ -33,6 +35,7 @@ const App = () => {
           <Route path={"/dashboard"} exact component={Dashboard} />
           <Route path={"/pay"} exact component={Payment} />
           <Route path={"/store"} exact component={Store} />
+          <Route path={"/products"} exact component={ProductList} />
           <Route path={"*"} exact component={NoMatchPage} />
         </Switch>
       </Router>

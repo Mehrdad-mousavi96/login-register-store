@@ -139,7 +139,8 @@
       "gender": "female",
       "country": "Iran",
       "receiveNewsLetter": "",
-      "id": 1
+      "id": 1,
+      "role": "user"
     },
     {
       "email": "ali@gmail.com",
@@ -149,7 +150,19 @@
       "gender": "male",
       "country": "Iran",
       "receiveNewsLetter": "",
-      "id": 2
+      "id": 2,
+      "role": "user"
+    },
+    {
+      "email": "admin@gmail.com",
+      "password": "Admin123",
+      "fullName": "admin",
+      "dateOfBirth": "2020-11-08",
+      "gender": "male",
+      "country": "Iran",
+      "receiveNewsLetter": "",
+      "id": 3,
+      "role": "admin"
     }
   ],
   "orders": [
@@ -208,6 +221,13 @@
       "productId": 1,
       "quantity": 1,
       "isPaymentCompleted": true
+    },
+    {
+      "userId": 1,
+      "productId": 1,
+      "quantity": 1,
+      "isPaymentCompleted": false,
+      "id": 11
     }
   ]
 }

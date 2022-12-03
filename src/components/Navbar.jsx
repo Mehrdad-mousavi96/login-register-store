@@ -10,6 +10,7 @@ import {
 } from "react-icons/ai";
 import { BsFillPersonPlusFill } from "react-icons/bs";
 import { GiExitDoor } from "react-icons/gi";
+import { BsBox } from "react-icons/bs";
 
 const Navbar = () => {
   const userContext = useContext(UserContext);
@@ -21,6 +22,7 @@ const Navbar = () => {
       isLoggedIn: false,
       currentUserName: null,
       currentUserId: null,
+      currentUserRole: null
     });
     window.location.href = "/login";
   };
@@ -74,7 +76,7 @@ const Navbar = () => {
             </div>
             <div className="hidden sm:ml-6 sm:block">
               <div className="flex space-x-4">
-                {userContext.user.isLoggedIn && (
+                {userContext.user.isLoggedIn && userContext.user.currentUserRole === 'user' ? (
                   <Link
                     to={"/dashboard"}
                     className="text-gray-300 flex items-center hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
@@ -82,7 +84,7 @@ const Navbar = () => {
                     <AiFillDashboard className="mx-1" size={17} />
                     Dashboard
                   </Link>
-                )}
+                ) : ''}
 
                 {userContext.user.isLoggedIn ? (
                   ""
@@ -116,7 +118,7 @@ const Navbar = () => {
                   ""
                 )}
 
-                {userContext.user.isLoggedIn && (
+                {userContext.user.isLoggedIn && userContext.user.currentUserRole === 'user' ? (
                   <Link
                     to={"/store"}
                     className="text-gray-300 flex items-center hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
@@ -124,7 +126,17 @@ const Navbar = () => {
                     <AiFillShopping className="mx-1" size={17} />
                     Store
                   </Link>
-                )}
+                ) : ''}
+                
+                {userContext.user.isLoggedIn && userContext.user.currentUserRole === 'admin' ? (
+                  <Link
+                    to={"/products"}
+                    className="text-gray-300 flex items-center hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                  >
+                    <BsBox className="mx-1" size={17} />
+                    Products
+                  </Link>
+                ) : ''}
 
                 {userContext.user.isLoggedIn && (
                   <a
