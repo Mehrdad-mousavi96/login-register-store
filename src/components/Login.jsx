@@ -6,7 +6,6 @@ import { Link } from "react-router-dom";
 import { UserContext } from "../useContext";
 
 const Login = (props) => {
-  
   const userContext = useContext(UserContext);
 
   // States
@@ -22,10 +21,10 @@ const Login = (props) => {
   });
   const [loginMessage, setLoginMessage] = useState("");
 
-  const inputRef = useRef(null)
+  const inputRef = useRef(null);
   useEffect(() => {
-    inputRef.current.focus()
-  }, [])
+    inputRef.current.focus();
+  }, []);
 
   // Validate Function
   const validate = () => {
@@ -98,14 +97,19 @@ const Login = (props) => {
       if (response.ok) {
         let responseBody = await response.json();
         if (responseBody.length > 0) {
-          userContext.setUser({
-            ...userContext.user,
-            isLoggedIn: true,
-            currentUserId: responseBody[0].id,
-            currentUserName: responseBody[0].fullName,
-            currentUserRole: responseBody[0].role
+          userContext.dispatch({
+            type: "login",
+            payload: {
+              currentUserId: responseBody[0].id,
+              currentUserName: responseBody[0].fullName,
+              currentUserRole: responseBody[0].role,
+            },
           });
-          {responseBody[0].role === 'user' ? props.history.replace("/dashboard") : props.history.replace("/products") }
+          {
+            responseBody[0].role === "user"
+              ? props.history.replace("/dashboard")
+              : props.history.replace("/products");
+          }
         } else {
           setLoginMessage(
             <span className="bg-red-200">Invalid Login, Please Try Again</span>

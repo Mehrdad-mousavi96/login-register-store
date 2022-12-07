@@ -6,8 +6,11 @@ import { BrandsService, CategoriesService, ProductService } from "./Service";
 const ProductList = () => {
   const [products, setProducts] = useState([]);
   const [search, setSearch] = useState("");
+  const [brands, setBrands] = useState([])
+  
 
   useEffect(() => {
+    
     (async () => {
       let brandsResponse = await BrandsService.fetchBrands();
       let brandsResponseBody = await brandsResponse.json();
@@ -36,6 +39,7 @@ const ProductList = () => {
       setProducts(productsResponseBody);
     })();
   }, [search]);
+
 
   return (
     <div className="max-w-[1000px] mx-auto p-4 flex flex-col">

@@ -15,7 +15,7 @@ const Register = (props) => {
     gender: "",
     country: "",
     receiveNewsLetter: "",
-    role: 'user'
+    role: "user",
   });
 
   const [countries, setCountries] = useState([
@@ -55,11 +55,11 @@ const Register = (props) => {
 
   useEffect(() => validate, []);
 
-  const inputRef = useRef(null)
+  const inputRef = useRef(null);
 
   useEffect(() => {
-    inputRef.current.focus()
-  }, [])
+    inputRef.current.focus();
+  }, []);
 
   useEffect(() => {
     document.title = "Register";
@@ -180,12 +180,13 @@ const Register = (props) => {
 
       if (response.ok) {
         const responseBody = await response.json();
-        userContext.setUser({
-          ...userContext.user,
-          isLoggedIn: true,
-          currentUserId: responseBody.id,
-          currentUserName: responseBody.fullName,
-          currentUserRole: responseBody.role
+        userContext.dispatch({
+          type: "login",
+          payload: {
+            currentUserId: responseBody.id,
+            currentUserName: responseBody.fullName,
+            currentUserRole: responseBody.role,
+          },
         });
         props.history.replace("/dashboard");
       }

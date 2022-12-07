@@ -163,6 +163,17 @@
       "receiveNewsLetter": "",
       "id": 3,
       "role": "admin"
+    },
+    {
+      "email": "ozgal@gmail.com",
+      "password": "Ozgal123",
+      "fullName": "ozgal",
+      "dateOfBirth": "2022-12-24",
+      "gender": "male",
+      "country": "Iran",
+      "receiveNewsLetter": "",
+      "id": 4,
+      "role": "user"
     }
   ],
   "orders": [
@@ -228,6 +239,20 @@
       "quantity": 1,
       "isPaymentCompleted": false,
       "id": 11
+    },
+    {
+      "userId": 4,
+      "productId": 1,
+      "quantity": 1,
+      "isPaymentCompleted": false,
+      "id": 12
+    },
+    {
+      "userId": 4,
+      "productId": 2,
+      "quantity": 1,
+      "isPaymentCompleted": false,
+      "id": 13
     }
   ]
 }

@@ -17,13 +17,9 @@ const Navbar = () => {
 
   const onLogout = (e) => {
     e.preventDefault();
-    userContext.setUser({
-      ...userContext.user,
-      isLoggedIn: false,
-      currentUserName: null,
-      currentUserId: null,
-      currentUserRole: null
-    });
+    userContext.dispatch({
+      type: 'logout'
+    })
     window.location.href = "/login";
   };
 
